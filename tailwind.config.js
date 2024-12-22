@@ -6,6 +6,13 @@ module.exports = {
   content: ["app/**/*.{tsx,jsx,ts,js}", "components/**/*.{tsx,jsx,ts,js}"],
   presets: [require('nativewind/preset')],
   theme: {
+    screens: {
+      'sm': '640px',    // Small devices (phones)
+      'md': '768px',    // Medium devices (tablets)
+      'lg': '1024px',   // Large devices (desktops)
+      'xl': '1280px',   // Extra large devices
+      '2xl': '1536px',  // 2X Extra large devices
+    },
     extend: {
       colors: {
         primary: {

@@ -1,26 +1,28 @@
-import { View, FlatList } from "react-native";
+import { View, FlatList, useWindowDimensions } from "react-native";
 import products from "../assets/products.json";
 import ProductListItem from "../components/ProductListItem";
 import { useBreakpointValue } from "@/components/ui/utils/use-break-point-value";
+
 export default function Index() {
-  // const { width } = useWindowDimensions();
-  // const numColumns = width > 700 ? 3 : 2;
+  const { width } = useWindowDimensions();
+  console.log('Current window width:', width);
+  
   const numColumns = useBreakpointValue({
-    default: 2,
-    sm: 3,
+    default: 2,     // Mobile (<640px)
+    md: 3,          // Tablet (≥768px)
+    lg: 4,          // Desktop (≥1024px)
   });
+  console.log('Current numColumns:', numColumns);
 
   return (
-    <View style={{ flex: 1, padding: 10 }}>
       <FlatList
         key={`list-${numColumns}`}
         data={products}
         numColumns={numColumns}
-        contentContainerClassName="gap-2 max-w-[960px] mx-auto w-full"
-        columnWrapperClassName="gap-2"
+        contentContainerClassName="gap-2 py-4 px-2"
+        columnWrapperClassName="gap-2 justify-center w-full"
         renderItem={({ item }) => <ProductListItem product={item} />}
         keyExtractor={(item) => item.id.toString()}
       />
-    </View>
   );
 }
