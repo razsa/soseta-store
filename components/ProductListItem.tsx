@@ -25,7 +25,7 @@ export default function ProductListItem({ product }: { product: Product }) {
       alt={`${product.name} image`}
       resizeMode="contain"
     />
-    <Text className="text-sm font-normal mb-2 text-typography-700">
+    <Text className="text-sm font-normal mb-2 text-typography-700" numberOfLines={1}>
       {product.name} 
     </Text>
       <Heading size="md" className="mb-2">
