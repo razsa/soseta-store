@@ -1,5 +1,5 @@
 import { Text } from "@/components/ui/text";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, Stack } from "expo-router";
 import products from "@/assets/products.json";
 import { Card } from "@/components/ui/card";
 import { Image } from "@/components/ui/image";
@@ -16,9 +16,10 @@ export default function ProductDetailsScreen() {
     return <Text>Product not found</Text>;
   }
 
-
   return (
-    <Card className="p-5 rounded-lg max-w-[360px] flex-1">
+    <Box className="bg-purple-200 flex-1 items-center p-3">
+      <Stack.Screen options={{ title: product.name }} />
+    <Card className="p-5 rounded-lg max-w-[960px] w-full flex-1">
     <Image
       source={{
         uri: product.image,
@@ -51,7 +52,7 @@ export default function ProductDetailsScreen() {
         </ButtonText>
       </Button>
     </Box>
-
   </Card>
+  </Box>
   );
 }
