@@ -7,10 +7,20 @@ import { VStack } from "@/components/ui/vstack";
 import { Heading } from "@/components/ui/heading";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Box } from "@/components/ui/box";
+import useCart from "@/store/cartStore";
 
 export default function ProductDetailsScreen() {
+
+  const addProduct = useCart((state) => state.addProduct);
+  const cartItems = useCart((state) => state.items);
+  console.log(JSON.stringify(cartItems, null, 2));
+
   const { id } = useLocalSearchParams<{ id: string }>();
   const product = products.find((p) => p.id == Number(id));
+
+  const addToCart = () => {
+    addProduct(product);
+  }
 
   if (!product) {
     return <Text>Product not found</Text>;
@@ -40,7 +50,7 @@ export default function ProductDetailsScreen() {
       </Text>
     </VStack>
     <Box className="flex-col sm:flex-row">
-      <Button className="px-4 py-2 mr-0 mb-3 sm:mr-3 sm:mb-0 sm:flex-1">
+      <Button onPress={addToCart} className="px-4 py-2 mr-0 mb-3 sm:mr-3 sm:mb-0 sm:flex-1">
         <ButtonText size="sm">Add to cart</ButtonText>
       </Button>
       <Button
