@@ -377,9 +377,10 @@ func main() {
 			}
 		}
 
-		// if err := seedExampleData(app); err != nil {
-		// 	log.Printf("Warning: Failed to seed example data: %v", err)
-		// }
+		err := importProducts(app)
+		if err != nil {
+			log.Printf("Error importing products: %v", err)
+		}
 
 		return se.Next()
 	})
