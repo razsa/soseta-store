@@ -1,5 +1,5 @@
 import { Link, Stack } from "expo-router";
-import { ShoppingCart } from "lucide-react-native";
+import { ShoppingCart, User } from "lucide-react-native";
 import { Icon } from "@/components/ui/icon";
 import useCart from "@/store/cartStore";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
@@ -17,7 +17,7 @@ export default function RootLayout() {
         screenOptions={{
           headerRight: () => (
             <Link href="/cart" asChild>
-              <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
+              <Pressable className="flex-row gap-2">
                 <Icon as={ShoppingCart} />
                 {itemCount > 0 && (
                   <Text style={{ marginLeft: 5, fontSize: 12 }}>{itemCount}</Text>
@@ -25,8 +25,15 @@ export default function RootLayout() {
               </Pressable>
             </Link>
           ),
+          headerLeft: () => (
+            <Link href="/login" asChild>
+              <Pressable className="flex-row gap-2">
+                <Icon as={User} />
+              </Pressable>
+            </Link>
+          ),
         }}
-      >
+        >
         <Stack.Screen name="index" options={{ title: "Shop" }} />
         <Stack.Screen name="product/[id]" options={{ title: "Product" }} />
       </Stack>
