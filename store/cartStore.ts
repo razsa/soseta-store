@@ -19,6 +19,8 @@ export const useCart = create((set) => ({
             }
         }),
 
+        resetCart: () => set({ items: []})
+
 }));
 
 export default useCart;
