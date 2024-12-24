@@ -11,6 +11,7 @@ export type Products = RecordModel & {
   price: number;
   stock: string;
 };
+
 const PRODUCT_COLLECTION = 'products';
 export const usePocketbase = () => {
   const pb = new PocketBase(`${API_URL}`);
