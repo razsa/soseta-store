@@ -9,10 +9,11 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { Box } from "@/components/ui/box";
 import useCart from "@/store/cartStore";
 import { useEffect, useState } from "react";
+import { getPocketBaseImageUrl } from "@/components/utils/pocketbase-image-url";
 
 export default function ProductDetailsScreen() {
   const [product, setProduct] = useState<Products | null>(null);
-  const addProductToCart = useCart((state) => state.addProduct);
+  const addProductToCart = useCart((state: CartState) => state.addProduct);
   const { id } = useLocalSearchParams<{ id: string }>();
   const { getProductById } = usePocketbase();
 
@@ -41,14 +42,16 @@ export default function ProductDetailsScreen() {
     <Box className="bg-purple-200 flex-1 items-center p-3">
       <Stack.Screen options={{ title: product.name }} />
       <Card className="p-5 rounded-lg max-w-[960px] w-full flex-1">
-        <Image
-          source={{
-            uri: product.imageUrl,
-          }}
-          className="mb-6 h-[240px] w-full rounded-md aspect-[4/3]"
-          alt={`${product.name} image`}
-          resizeMode="contain"
-        />
+        {product.image && (
+          <Image
+            source={{
+              uri: getPocketBaseImageUrl('products', product.id, product.image),
+            }}
+            className="mb-6 h-[240px] w-full rounded-md aspect-[4/3]"
+            alt={`${product.name} image`}
+            resizeMode="contain"
+          />
+        )}
         <Text className="text-sm font-normal mb-2 text-typography-700">
           {product.name}
         </Text>
