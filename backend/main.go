@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -377,7 +378,7 @@ func main() {
 			}
 		}
 
-		err := importProducts(app)
+		err := seedExampleData(app)
 		if err != nil {
 			log.Printf("Error importing products: %v", err)
 		}
@@ -390,98 +391,83 @@ func main() {
 	}
 }
 
-// func seedExampleData(app *pocketbase.PocketBase) error {
-// 	// Example categories
-// 	categories := []map[string]interface{}{
-// 		{"name": "Electronics", "description": "Electronic devices and accessories"},
-// 		{"name": "Clothing", "description": "Fashion and apparel"},
-// 		{"name": "Books", "description": "Books and literature"},
-// 		{"name": "Home & Garden", "description": "Home decor and gardening items"},
-// 	}
+func seedExampleData(app *pocketbase.PocketBase) error {
+	// Example categories
+	categories := []map[string]interface{}{
+		{"name": "Electronics", "description": "Electronic devices and accessories"},
+		{"name": "Clothing", "description": "Fashion and accessories"},
+		{"name": "Home & Garden", "description": "Home decor and gardening items"},
+	}
 
-// 	categoryIds := make(map[string]string)
-// 	for _, cat := range categories {
-// 		collection, err := app.FindCollectionByNameOrId("categories")
-// 		if err != nil {
-// 			return fmt.Errorf("failed to find categories collection: %v", err)
-// 		}
+	categoryIds := make(map[string]string)
+	for _, cat := range categories {
+		collection, err := app.FindCollectionByNameOrId("categories")
+		if err != nil {
+			return fmt.Errorf("failed to find categories collection: %v", err)
+		}
 
-// 		record := core.NewRecord(collection)
-// 		record.Set("name", cat["name"])
-// 		record.Set("description", cat["description"])
+		record := core.NewRecord(collection)
+		record.Set("name", cat["name"])
+		record.Set("description", cat["description"])
 
-// 		if err := app.Save(record); err != nil {
-// 			return fmt.Errorf("failed to create category: %v", err)
-// 		}
+		if err := app.Save(record); err != nil {
+			return fmt.Errorf("failed to create category: %v", err)
+		}
 
-// 		categoryIds[cat["name"].(string)] = record.Id
-// 	}
+		categoryIds[cat["name"].(string)] = record.Id
+	}
 
-// 	// Seed Products
-// 	products := []map[string]interface{}{
-// 		{
-// 			"name":        "Smartphone X",
-// 			"description": "Latest smartphone with advanced features",
-// 			"price":       699.99,
-// 			"stock":       50,
-// 			"category":    categoryIds["Electronics"],
-// 		},
-// 		{
-// 			"name":        "Laptop Pro",
-// 			"description": "High-performance laptop for professionals",
-// 			"price":       1299.99,
-// 			"stock":       30,
-// 			"category":    categoryIds["Electronics"],
-// 		},
-// 		{
-// 			"name":        "Classic T-Shirt",
-// 			"description": "Comfortable cotton t-shirt",
-// 			"price":       24.99,
-// 			"stock":       100,
-// 			"category":    categoryIds["Clothing"],
-// 		},
-// 		{
-// 			"name":        "Designer Jeans",
-// 			"description": "Premium quality denim jeans",
-// 			"price":       89.99,
-// 			"stock":       75,
-// 			"category":    categoryIds["Clothing"],
-// 		},
-// 		{
-// 			"name":        "Programming Guide",
-// 			"description": "Comprehensive programming book",
-// 			"price":       49.99,
-// 			"stock":       45,
-// 			"category":    categoryIds["Books"],
-// 		},
-// 		{
-// 			"name":        "Garden Tools Set",
-// 			"description": "Complete set of essential garden tools",
-// 			"price":       129.99,
-// 			"stock":       25,
-// 			"category":    categoryIds["Home & Garden"],
-// 		},
-// 	}
+	// Seed Products
+	products := []map[string]interface{}{
+		{
+			"name":        "Pepper Spray Keychain",
+			"description": "Black pepper spray keychain",
+			"price":       9.99,
+			"stock":       50,
+			"category":    categoryIds["Electronics"],
+		},
+		{
+			"name":        "Bottle Opener Keychain",
+			"description": "Blue bottle opener keychain",
+			"price":       6.99,
+			"stock":       30,
+			"category":    categoryIds["Electronics"],
+		},
+		{
+			"name":        "Cat Punch Keychain",
+			"description": "Pink Cat keychain",
+			"price":       5.99,
+			"stock":       41,
+			"category":    categoryIds["Electronics"],
+		},
+		{
+			"name":        "Window Breaker Keychain",
+			"description": "Red window breaker keychain",
+			"price":       7.99,
+			"stock":       75,
+			"category":    categoryIds["Electronics"],
+		},
+	}
 
-// 	// Create products
-// 	for _, prod := range products {
-// 		collection, err := app.FindCollectionByNameOrId("products")
-// 		if err != nil {
-// 			return fmt.Errorf("failed to find products collection: %v", err)
-// 		}
+	// Create products
+	for _, prod := range products {
+		collection, err := app.FindCollectionByNameOrId("products")
+		if err != nil {
+			return fmt.Errorf("failed to find products collection: %v", err)
+		}
 
-// 		record := core.NewRecord(collection)
-// 		record.Set("name", prod["name"])
-// 		record.Set("description", prod["description"])
-// 		record.Set("price", prod["price"])
-// 		record.Set("stock", prod["stock"])
-// 		record.Set("category", prod["category"])
+		record := core.NewRecord(collection)
+		record.Set("name", prod["name"])
+		record.Set("description", prod["description"])
+		record.Set("price", prod["price"])
+		record.Set("stock", prod["stock"])
+		record.Set("category", prod["category"])
 
-// 		if err := app.Save(record); err != nil {
-// 			return fmt.Errorf("failed to create product: %v", err)
-// 		}
-// 	}
+		if err := app.Save(record); err != nil {
+			return fmt.Errorf("failed to create product: %v", err)
+		}
+	}
 
-// 	log.Println("Seeding completed successfully!")
-// 	return nil
-// }
+	log.Println("Seeding completed successfully!")
+	return nil
+}
