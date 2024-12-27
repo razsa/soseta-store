@@ -47,3 +47,26 @@ func loginHandler(e *core.RequestEvent, app *pocketbase.PocketBase) error {
 	loginError := "Login Failed, Please try again"
 	return e.HTML(200, loginError)
 }
+
+func registerHandler(e *core.RequestEvent, app *pocketbase.PocketBase) error {
+	//extract registration data from request
+	email := e.Request.FormValue("email")
+	password := e.Request.FormValue("password")
+
+	collection, err := app.FindCollectionByNameOrId("users")
+	if err != nil {
+		return err
+	}
+
+	//create auth record in users collection
+	record := core.NewRecord(collection)
+	record.SetEmail(email)
+	record.SetPassword(password)
+
+	err = app.Save(record)
+	if err != nil {
+		return err
+	}
+
+	return e.Redirect(302, "/")
+}
