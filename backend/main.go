@@ -7,7 +7,6 @@ import (
 	"strconv"
 
 	"github.com/pocketbase/pocketbase"
-	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 
 	"e-com/collection" // Replace with your actual project name
@@ -26,8 +25,10 @@ func main() {
 
 	// Add custom routes
 	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
-		// serves static files from the provided public dir (if exists)
-		se.Router.GET("/{path...}", apis.Static(os.DirFS("./pb_public"), false))
+		// Login
+		se.Router.POST("/login", func(e *core.RequestEvent) error {
+			return loginHandler(e, app)
+		})
 
 		// Product search endpoint with filtering and pagination
 		se.Router.GET("/api/products/search", func(e *core.RequestEvent) error {
