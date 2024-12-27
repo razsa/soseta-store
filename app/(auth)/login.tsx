@@ -10,6 +10,8 @@ import { useState } from "react";
 
 export default function LoginScreen() {
     const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleState = () => {
         setShowPassword((showState) => {
@@ -17,9 +19,38 @@ export default function LoginScreen() {
         });
       };
 
+    const signIn = async () => {
+        try {
+          const response = await fetch('http://localhost:8090/api/collections/users/auth-with-password', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              identity: email,
+              password: password,
+            }),
+          });
+
+          if (response.ok) {
+            // Redirect to home page on successful login
+            window.location.href = '/';
+          } else {
+            // Handle login error
+            console.error('Login failed');
+            const text = await response.text();
+            console.log(text);
+            // Optionally display an error message to the user
+          }
+        } catch (error) {
+          console.error('Error during login:', error);
+          // Optionally display an error message to the user
+        }
+      };
+
       return (
         <FormControl
-          
+
           className="p-4 border rounded-lg max-w-[500px] border-outline-300 bg-white m-2"
         >
           <VStack space="xl">
@@ -27,7 +58,7 @@ export default function LoginScreen() {
             <VStack space="xs">
               <Text className="text-typography-500 leading-1">Email</Text>
               <Input>
-                <InputField type="text" />
+                <InputField type="text" value={email} onChangeText={setEmail} />
               </Input>
             </VStack>
             <VStack space="xs">
@@ -35,6 +66,8 @@ export default function LoginScreen() {
               <Input className="text-center">
                 <InputField
                   type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChangeText={setPassword}
                 />
                 <InputSlot className="pr-3" onPress={handleState}>
                   {/* EyeIcon, EyeOffIcon are both imported from 'lucide-react-native' */}
@@ -54,7 +87,7 @@ export default function LoginScreen() {
               </Button>
               <Button
                 className="flex-1"
-                onPress={() => {}}>
+                onPress={signIn}>
                 <ButtonText>Sign in</ButtonText>
               </Button>
 </HStack>
