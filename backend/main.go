@@ -30,6 +30,11 @@ func main() {
 			return loginHandler(e, app)
 		})
 
+		// Register
+		se.Router.POST("/register", func(e *core.RequestEvent) error {
+			return registerHandler(e, app)
+		})
+
 		// Product search endpoint with filtering and pagination
 		se.Router.GET("/api/products/search", func(e *core.RequestEvent) error {
 			collection, err := app.FindCollectionByNameOrId("products")

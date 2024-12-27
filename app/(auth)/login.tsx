@@ -15,83 +15,106 @@ export default function LoginScreen() {
 
     const handleState = () => {
         setShowPassword((showState) => {
-          return !showState;
+            return !showState;
         });
-      };
+    };
 
     const signIn = async () => {
         try {
-          const response = await fetch('http://localhost:8090/api/collections/users/auth-with-password', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              identity: email,
-              password: password,
-            }),
-          });
+            const response = await fetch('http://localhost:8090/api/collections/users/auth-with-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    identity: email,
+                    password: password,
+                }),
+            });
 
-          if (response.ok) {
-            // Redirect to home page on successful login
-            window.location.href = '/';
-          } else {
-            // Handle login error
-            console.error('Login failed');
-            const text = await response.text();
-            console.log(text);
-            // Optionally display an error message to the user
-          }
+            if (response.ok) {
+                window.location.href = '/';
+            } else {
+                console.error('Login failed');
+                const text = await response.text();
+                console.log(text);
+            }
         } catch (error) {
-          console.error('Error during login:', error);
-          // Optionally display an error message to the user
+            console.error('Error during login:', error);
         }
-      };
+    };
 
-      return (
+    const signUp = async () => {
+        try {
+            const response = await fetch('http://localhost:8090/api/collections/users/records', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                    passwordConfirm: password,
+                }),
+            });
+
+            if (response.ok) {
+                // Redirect to home page on successful signup
+                window.location.href = '/';
+            } else {
+                console.error('Signup failed');
+                const text = await response.text();
+                console.log(text);
+                // Optionally display an error message to the user
+            }
+        } catch (error) {
+            console.error('Error during signup:', error);
+            // Optionally display an error message to the user
+        }
+    };
+
+    return (
         <FormControl
-
-          className="p-4 border rounded-lg max-w-[500px] border-outline-300 bg-white m-2"
+            className="p-4 border rounded-lg max-w-[500px] border-outline-300 bg-white m-2"
         >
-          <VStack space="xl">
-            <Heading className="text-typography-900 leading-3 pt-3">Login</Heading>
-            <VStack space="xs">
-              <Text className="text-typography-500 leading-1">Email</Text>
-              <Input>
-                <InputField type="text" value={email} onChangeText={setEmail} />
-              </Input>
+            <VStack space="xl">
+                <Heading className="text-typography-900 leading-3 pt-3">Login</Heading>
+                <VStack space="xs">
+                    <Text className="text-typography-500 leading-1">Email</Text>
+                    <Input>
+                        <InputField type="text" value={email} onChangeText={setEmail} />
+                    </Input>
+                </VStack>
+                <VStack space="xs">
+                    <Text className="text-typography-500 leading-1">Password</Text>
+                    <Input className="text-center">
+                        <InputField
+                            type={showPassword ? 'text' : 'password'}
+                            value={password}
+                            onChangeText={setPassword}
+                        />
+                        <InputSlot className="pr-3" onPress={handleState}>
+                            <InputIcon
+                                as={showPassword ? EyeIcon : EyeOffIcon}
+                                className="text-darkBlue-500"
+                            />
+                        </InputSlot>
+                    </Input>
+                </VStack>
+                <HStack space="sm">
+                    <Button
+                        className="flex-1"
+                        variant="outline"
+                        onPress={signUp}>
+                        <ButtonText>Sign up</ButtonText>
+                    </Button>
+                    <Button
+                        className="flex-1"
+                        onPress={signIn}>
+                        <ButtonText>Sign in</ButtonText>
+                    </Button>
+                </HStack>
             </VStack>
-            <VStack space="xs">
-              <Text className="text-typography-500 leading-1">Password</Text>
-              <Input className="text-center">
-                <InputField
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChangeText={setPassword}
-                />
-                <InputSlot className="pr-3" onPress={handleState}>
-                  {/* EyeIcon, EyeOffIcon are both imported from 'lucide-react-native' */}
-                  <InputIcon
-                    as={showPassword ? EyeIcon : EyeOffIcon}
-                    className="text-darkBlue-500"
-                  />
-                </InputSlot>
-              </Input>
-            </VStack>
-            <HStack space="sm">
-              <Button
-                className="flex-1"
-                variant="outline"
-                onPress={() => {}}>
-                <ButtonText>Sign up</ButtonText>
-              </Button>
-              <Button
-                className="flex-1"
-                onPress={signIn}>
-                <ButtonText>Sign in</ButtonText>
-              </Button>
-</HStack>
-          </VStack>
         </FormControl>
-      );
-    }
+    );
+}
