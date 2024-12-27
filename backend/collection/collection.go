@@ -112,7 +112,7 @@ func createProductsCollection(app core.App) error {
 
 	// Add file field for images
 	collection.Fields.Add(&core.FileField{
-		Name:      "images",
+		Name:      "image",
 		MaxSelect: 5,
 		MimeTypes: []string{"image/jpg", "image/jpeg", "image/png", "image/gif"},
 		MaxSize:   5242880,
