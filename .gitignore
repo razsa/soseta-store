@@ -41,4 +41,4 @@ yarn-error.*
 app-example
 
 # PocketBase data
-pb_data
+backend/pb_data
